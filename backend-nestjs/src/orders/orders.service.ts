@@ -20,6 +20,23 @@ import { OrderHistoryQueryDto } from './dto/order-history-query.dto';
 import { ReportPeriod } from '../reports/dto/report-period.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
+export type OrderTotalItem = {
+  price: string | number;
+  quantity: number;
+};
+
+export function calculateOrderTotal(items: readonly OrderTotalItem[]): string {
+  const totalCents = items.reduce(
+    (total, item) => total + Math.round(Number(item.price) * 100) * item.quantity,
+    0,
+  );
+  return (totalCents / 100).toFixed(2);
+}
+
+export function calculateChange(totalAmount: number, customerPayment: number): number {
+  return Math.max(0, customerPayment - totalAmount);
+}
+
 @Injectable()
 export class OrdersService {
   constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
@@ -28,6 +45,10 @@ export class OrdersService {
     cashierId: number,
     createOrderDto: CreateOrderDto,
   ): Promise<Order> {
+    if (createOrderDto.items.length === 0) {
+      throw new BadRequestException('Giỏ hàng không được để trống');
+    }
+
     return this.dataSource.transaction(async (manager) => {
       const productIds = createOrderDto.items.map((item) => item.product_id);
       const products = await manager
@@ -54,17 +75,18 @@ export class OrdersService {
         return { item, product };
       });
 
-      const totalCents = orderItems.reduce(
-        (total, { item, product }) =>
-          total + this.toCents(product.price) * item.quantity,
-        0,
+      const totalAmount = calculateOrderTotal(
+        orderItems.map(({ item, product }) => ({
+          price: product.price,
+          quantity: item.quantity,
+        })),
       );
       const orderNumber = await this.nextOrderNumber(manager);
       const orderRepository = manager.getRepository(Order);
       const order = orderRepository.create({
         cashierId,
         orderNumber,
-        totalAmount: this.fromCents(totalCents),
+        totalAmount,
         paymentMethod: createOrderDto.payment_method,
         orderType: createOrderDto.order_type,
         status: OrderStatus.PENDING,

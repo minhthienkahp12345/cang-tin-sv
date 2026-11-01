@@ -1,0 +1,49 @@
+@baseUrl = http://127.0.0.1:3000/api
+@username = cashier1
+@password = 123456
+@productId = 1
+
+### 1. Đăng nhập thu ngân
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### 2. Lấy danh sách sản phẩm
+GET {{baseUrl}}/products
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### 3. Tạo đơn tiền mặt
+# @name createOrder
+POST {{baseUrl}}/orders
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "order_type": "EAT_IN",
+  "payment_method": "CASH",
+  "items": [
+    {
+      "product_id": {{productId}},
+      "quantity": 2,
+      "note": "Test API"
+    }
+  ]
+}
+
+### 4. Hoàn thành đơn để ghi nhận doanh thu
+PATCH {{baseUrl}}/orders/{{createOrder.response.body.$.id}}/status
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "status": "COMPLETED"
+}
+
+### 5. Kiểm tra đơn hàng hôm nay
+GET {{baseUrl}}/orders/today
+Authorization: Bearer {{login.response.body.$.accessToken}}
