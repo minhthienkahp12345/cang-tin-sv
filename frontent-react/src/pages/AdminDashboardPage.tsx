@@ -5,6 +5,8 @@ type Dashboard = {
   summary: {
     period: 'day' | 'week' | 'month'
     totalRevenue: number
+    cashRevenue: number
+    transferRevenue: number
     completedOrders: number
     averageOrderValue: number
   }
@@ -109,8 +111,10 @@ export default function AdminDashboardPage() {
         </div>
         {error && <div className="mb-5 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>}
         {loading ? <div className="rounded-2xl bg-white p-12 text-center text-slate-400">Đang tải báo cáo...</div> : dashboard && <>
-          <section className="grid gap-4 md:grid-cols-3">
+          <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             <div className="rounded-2xl bg-orange-500 p-5 text-white shadow-lg shadow-orange-100"><p className="text-sm font-bold text-orange-100">Tổng doanh thu ({period === 'day' ? 'ngày' : period === 'week' ? 'tuần' : 'tháng'})</p><p className="mt-3 text-3xl font-black">{money(dashboard.summary.totalRevenue)}</p></div>
+            <div className="rounded-2xl bg-emerald-500 p-5 text-white shadow-lg shadow-emerald-100"><p className="text-sm font-bold text-emerald-100">Tiền mặt</p><p className="mt-3 text-3xl font-black">{money(dashboard.summary.cashRevenue)}</p></div>
+            <div className="rounded-2xl bg-blue-500 p-5 text-white shadow-lg shadow-blue-100"><p className="text-sm font-bold text-blue-100">Chuyển khoản</p><p className="mt-3 text-3xl font-black">{money(dashboard.summary.transferRevenue)}</p></div>
             <div className="rounded-2xl bg-white p-5 shadow-sm"><p className="text-sm font-bold text-slate-500">Số hóa đơn thành công</p><p className="mt-3 text-3xl font-black">{dashboard.summary.completedOrders}</p></div>
             <div className="rounded-2xl bg-white p-5 shadow-sm"><p className="text-sm font-bold text-slate-500">Trung bình / đơn</p><p className="mt-3 text-3xl font-black text-emerald-600">{money(dashboard.summary.averageOrderValue)}</p></div>
           </section>

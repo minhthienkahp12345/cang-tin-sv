@@ -1,5 +1,17 @@
 # React + TypeScript + Vite
 
+## Chạy demo trên máy mới
+
+```powershell
+npm ci
+Copy-Item .env.example .env
+npm run dev
+```
+
+Frontend mặc định chạy tại `http://localhost:5174` và gọi backend tại
+`http://127.0.0.1:3000/api`. Có thể đổi địa chỉ backend trong file `.env`
+qua biến `VITE_API_URL`.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

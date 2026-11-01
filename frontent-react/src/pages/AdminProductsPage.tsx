@@ -105,7 +105,7 @@ export default function AdminProductsPage() {
         formData.append('image', imageFile)
         const token = localStorage.getItem('accessToken')
         const uploadResponse = await fetch(
-          `http://127.0.0.1:3000/api/products/${response.data.id}/image`,
+          `${import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:3000/api'}/products/${response.data.id}/image`,
           {
             method: 'POST',
             headers: token ? { Authorization: `Bearer ${token}` } : {},

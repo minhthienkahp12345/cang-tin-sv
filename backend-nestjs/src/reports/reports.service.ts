@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { Order, OrderStatus } from '../entities/order.entity';
+import { PaymentMethod } from '../entities/order.entity';
 import { OrderItem } from '../entities/order-item.entity';
 import { ReportPeriod } from './dto/report-period.dto';
 
@@ -22,10 +23,27 @@ export class ReportsService {
       .createQueryBuilder('purchaseOrder')
       .select('COALESCE(SUM(purchaseOrder.total_amount), 0)', 'totalRevenue')
       .addSelect('COUNT(purchaseOrder.id)', 'completedOrders')
+      .addSelect(
+        'COALESCE(SUM(CASE WHEN purchaseOrder.payment_method = :cash THEN purchaseOrder.total_amount ELSE 0 END), 0)',
+        'cashRevenue',
+      )
+      .addSelect(
+        'COALESCE(SUM(CASE WHEN purchaseOrder.payment_method = :transfer THEN purchaseOrder.total_amount ELSE 0 END), 0)',
+        'transferRevenue',
+      )
       .where('purchaseOrder.status = :status', { status: OrderStatus.COMPLETED })
+      .setParameters({
+        cash: PaymentMethod.CASH,
+        transfer: PaymentMethod.TRANSFER,
+      })
       .andWhere('purchaseOrder.created_at >= :start', { start })
       .andWhere('purchaseOrder.created_at < :end', { end })
-      .getRawOne<{ totalRevenue: string; completedOrders: string }>();
+      .getRawOne<{
+        totalRevenue: string;
+        completedOrders: string;
+        cashRevenue: string;
+        transferRevenue: string;
+      }>();
 
     const categoryRows = await this.dataSource
       .getRepository(OrderItem)
@@ -90,11 +108,15 @@ export class ReportsService {
 
     const totalRevenue = Number(summary?.totalRevenue ?? 0);
     const completedOrders = Number(summary?.completedOrders ?? 0);
+    const cashRevenue = Number(summary?.cashRevenue ?? 0);
+    const transferRevenue = Number(summary?.transferRevenue ?? 0);
 
     return {
       summary: {
         period,
         totalRevenue,
+        cashRevenue,
+        transferRevenue,
         completedOrders,
         averageOrderValue:
           completedOrders > 0 ? totalRevenue / completedOrders : 0,

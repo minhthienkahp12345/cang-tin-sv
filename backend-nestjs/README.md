@@ -51,6 +51,19 @@ $ npm run start:prod
 ```
 
 The `.env` file must define `JWT_SECRET`. Keep it local and never commit it.
+The database settings are read from `DB_HOST`, `DB_PORT`, `DB_USERNAME`,
+`DB_PASSWORD`, and `DB_NAME`. The database schema and demo data must exist
+before starting the backend because TypeORM synchronization is disabled.
+
+## Chạy demo trên máy mới
+
+1. Cài Node.js 24 và MySQL.
+2. Tạo database `canteen_db` và import schema/dữ liệu demo từ máy hiện tại.
+3. Tạo `.env` từ `.env.example`, rồi cập nhật thông tin MySQL nếu cần.
+4. Chạy `npm ci` và `npm run start:dev`.
+
+Tài khoản demo phụ thuộc vào dữ liệu trong database được import. Không commit
+file `.env` hoặc mật khẩu thật lên repository.
 
 ## Run tests
 
