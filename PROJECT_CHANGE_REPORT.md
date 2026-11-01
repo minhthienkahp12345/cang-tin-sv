@@ -388,3 +388,9 @@ Các lệnh kiểm tra đã hoàn tất thành công sau những thay đổi g�
 - Thư mục upload ảnh cần có quyền ghi.
 - Database phải có cột `users.created_at` nếu muốn hiển thị ngày tạo tài khoản.
 - File upload hiện được lưu trên máy chạy backend; khi triển khai nhiều máy nên chuyển sang object storage hoặc dịch vụ lưu trữ tập trung.
+
+## 8. CI/CD
+
+- GitHub Actions chạy CI khi push hoặc pull request vào các nhánh `main`, `master` và `develop`.
+- CI cài dependencies bằng `npm ci`, build backend và chạy lint/build frontend.
+- Workflow chỉ có CI; chưa cấu hình CD/deploy tự động vì dự án chưa chọn nền tảng triển khai.

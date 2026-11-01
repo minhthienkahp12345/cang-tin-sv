@@ -12,6 +12,13 @@ on:
       - master
       - develop
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   backend-ci:
     name: Backend CI
@@ -54,6 +61,10 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontent-react
         run: npm ci
+
+      - name: Lint frontend
+        working-directory: frontent-react
+        run: npm run lint
 
       - name: Build frontend
         working-directory: frontent-react
