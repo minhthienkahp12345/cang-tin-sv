@@ -1,0 +1,60 @@
+name: Continuous Integration (CI) Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  backend-ci:
+    name: Backend CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: backend-nestjs/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend-nestjs
+        run: npm ci
+
+      - name: Build backend
+        working-directory: backend-nestjs
+        run: npm run build
+
+  frontend-ci:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: frontent-react/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontent-react
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontent-react
+        run: npm run build

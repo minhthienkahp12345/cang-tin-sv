@@ -1,0 +1,7 @@
+# Project-level ignores
+**/node_modules/
+**/dist/
+**/.env
+**/.env.*
+**/coverage/
+**/*.tsbuildinfo
