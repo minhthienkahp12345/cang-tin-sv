@@ -34,6 +34,9 @@ $ npm install
 ## Compile and run the project
 
 ```bash
+# Create a local environment file before starting the application.
+copy .env.example .env
+
 # development
 $ npm run start
 
@@ -46,6 +49,8 @@ $ npm run dev
 # production mode
 $ npm run start:prod
 ```
+
+The `.env` file must define `JWT_SECRET`. Keep it local and never commit it.
 
 ## Run tests
 
