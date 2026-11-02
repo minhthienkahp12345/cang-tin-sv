@@ -1,0 +1,16 @@
+@startuml
+node "Client Machine (Quầy POS)" {
+  artifact "Web Browser (Chrome/Edge)" as Browser
+}
+
+node "Web & Application Server" {
+  component "Node.js / Express Web Server" as WebServer
+}
+
+node "Database Server" {
+  database "MySQL 8.0 DBMS" as DBServer
+}
+
+Browser -- WebServer : HTTP / HTTPS (Port 3000)
+WebServer -- DBServer : TCP/IP (Port 3306)
+@enduml

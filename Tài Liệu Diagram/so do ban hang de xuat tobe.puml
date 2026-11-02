@@ -1,0 +1,34 @@
+@startuml
+skinparam handwritten false
+skinparam packageStyle rect
+
+title Sơ đồ Quy trình Bán hàng Đề xuất (To-Be) qua Phần mềm
+
+|#LightYellow|Sinh viên|
+start
+:Xem thực đơn trên màn hình hiển thị;
+:Lựa chọn món ăn và báo Nhân viên;
+
+|#LightGreen|Nhân viên Bán hàng|
+:Chọn các món ăn trên giao diện phần mềm POS;
+|#LightBlue|Hệ thống Phần mềm|
+:Tự động tính tổng tiền hóa đơn;
+|Nhân viên Bán hàng|
+:Thông báo số tiền cần thanh toán;
+
+|Sinh viên|
+:Thanh toán (Tiền mặt / Chuyển khoản QR);
+
+|Nhân viên Bán hàng|
+:Xác nhận thanh toán trên phần mềm;
+|Hệ thống Phần mềm|
+:Tạo và lưu Hóa đơn vào CSDL;
+:In / Hiển thị hóa đơn điện tử;
+
+|Nhân viên Bán hàng|
+:Bàn giao món ăn kèm hóa đơn;
+
+|Sinh viên|
+:Nhận món ăn và hóa đơn;
+stop
+@enduml

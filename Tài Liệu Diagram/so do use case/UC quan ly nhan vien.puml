@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+
+actor "Quản lý" as Manager
+
+rectangle "Hệ thống quản lý căng tin" {
+
+    usecase "Quản lý nhân viên" as UC6
+    usecase "Thêm nhân viên" as UC61
+    usecase "Cập nhật thông tin nhân viên" as UC62
+    usecase "Xóa nhân viên" as UC63
+
+    UC6 .> UC61 : <<include>>
+    UC6 .> UC62 : <<include>>
+    UC6 .> UC63 : <<include>>
+}
+
+Manager --> UC6
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+skinparam handwritten false
+skinparam monochrome true
+skinparam packageStyle rect
+
+title Sơ đồ Quy trình Bán hàng Hiện tại (As-Is)
+
+|#LightYellow|Sinh viên|
+start
+:Xem bảng giá hoặc hỏi món ăn;
+:Đọc danh sách món và số lượng;
+
+|#LightBlue|Nhân viên Bán hàng|
+:Tiếp nhận đơn hàng bằng miệng;
+:Sử dụng máy tính bỏ túi tính tổng tiền;
+:Báo tổng số tiền cho Sinh viên;
+
+|Sinh viên|
+:Thanh toán tiền mặt;
+
+|Nhân viên Bán hàng|
+:Thu tiền và thối tiền thừa (nếu có);
+:Ghi chép thủ công vào sổ bán hàng;
+:Lấy món ăn giao cho Sinh viên;
+
+|Sinh viên|
+:Nhận món ăn;
+stop
+@enduml

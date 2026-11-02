@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+
+actor "Sinh viên" as Student
+actor "Nhân viên" as Staff
+
+rectangle "Hệ thống quản lý căng tin" {
+
+    usecase "Xem thực đơn" as UC1
+    usecase "Chọn món ăn" as UC2
+    usecase "Tạo đơn hàng" as UC3
+
+    UC2 .> UC1 : <<include>>
+    UC2 .> UC3 : <<include>>
+}
+
+Student --> UC2 : Yêu cầu chọn món
+Staff --> UC2 : Nhập lựa chọn
+
+@enduml

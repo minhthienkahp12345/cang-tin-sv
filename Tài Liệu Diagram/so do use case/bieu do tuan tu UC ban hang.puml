@@ -1,0 +1,88 @@
+@startuml
+autonumber
+skinparam Style strictuml
+skinparam SequenceMessageAlignment left
+
+actor "Sinh viên" as SV
+actor "Nhân viên" as NV
+
+box "Hệ Thống Căng Tin (ECB Architecture)" #E8F4F8
+boundary "GiaoDienBanHang" as UI
+control "BanHangController" as Ctrl
+entity "HoaDon" as HD
+entity "ChiTietHoaDon" as CTHD
+entity "MonAn" as MA
+end box
+
+'--- LUỒNG NGHIỆP VỤ BÁN HÀNG ---
+SV -> NV : Yêu cầu đặt món (danh sách món)
+activate NV
+
+NV -> UI : Nhấn "Tạo hóa đơn mới"
+activate UI
+UI -> Ctrl : taoHoaDonMoi()
+activate Ctrl
+Ctrl -> HD ** : create()
+Ctrl --> UI : Hóa đơn mới khởi tạo
+deactivate Ctrl
+deactivate UI
+
+' Loop nhập danh sách món ăn
+loop Với mỗi món ăn Sinh viên chọn
+    NV -> UI : Chọn món ăn & nhập số lượng
+    activate UI
+    UI -> Ctrl : themMonAn(maMon, soLuong)
+    activate Ctrl
+    
+    Ctrl -> MA : getGia()
+    activate MA
+    MA --> Ctrl : donGia
+    deactivate MA
+    
+    Ctrl -> HD : addChiTiet(maMon, soLuong, donGia)
+    activate HD
+    HD -> CTHD ** : create(maMon, soLuong, donGia)
+    HD --> Ctrl : Xác nhận đã thêm
+    deactivate HD
+    
+    Ctrl --> UI : Cập nhật danh sách món trên màn hình
+    deactivate Ctrl
+    deactivate UI
+end
+
+' Thống kê và hiển thị tổng tiền
+NV -> UI : Nhấn "Tính tổng tiền"
+activate UI
+UI -> Ctrl : xuLyThanhToan()
+activate Ctrl
+Ctrl -> HD : tinhTongTien()
+activate HD
+HD --> Ctrl : tongTien
+deactivate HD
+
+Ctrl --> UI : Hiển thị tổng tiền (tongTien)
+deactivate Ctrl
+
+UI --> NV : Màn hình hiển thị số tiền cần thu
+deactivate UI
+
+NV -> SV : Thông báo số tiền cần thanh toán
+SV -> NV : Đưa tiền / Quẹt thẻ
+NV -> UI : Xác nhận đã nhận tiền
+activate UI
+
+UI -> Ctrl : luuHoaDon()
+activate Ctrl
+Ctrl -> HD : capNhatTrangThai("DaThanhToan")
+activate HD
+HD --> Ctrl : OK
+deactivate HD
+
+Ctrl --> UI : Thông báo thanh toán thành công
+deactivate Ctrl
+
+UI --> NV : In hóa đơn
+deactivate UI
+deactivate NV
+
+@enduml

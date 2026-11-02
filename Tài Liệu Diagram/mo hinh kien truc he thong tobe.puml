@@ -1,0 +1,16 @@
+@startuml
+skinparam handwritten false
+skinparam monochrome true
+skinparam packageStyle rect
+left to right direction
+
+title MÔ HÌNH KIẾN TRÚC HỆ THỐNG TO-BE
+
+node "Màn hình Web POS\n(Giao diện User)" as pos
+node "Web Server/API\n(Xử lý Nghiệp vụ)" as server
+database "CSDL MySQL\n(Lưu trữ)" as db
+
+pos -> server : HTTP/REST
+server -> db
+
+@enduml

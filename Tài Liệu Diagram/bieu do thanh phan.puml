@@ -1,0 +1,27 @@
+@startuml
+package "Client Tier (Browser / POS App)" {
+  [UI Component (HTML/React)] as UI
+  [POS Controller] as POSCtrl
+}
+
+package "Application Tier (Node.js/Express Server)" {
+  [Auth Middleware] as Auth
+  [Menu Service] as MenuSvc
+  [Invoice Service] as InvSvc
+  [Report Service] as RepSvc
+}
+
+package "Data Tier (Database)" {
+  database "MySQL Database" as DB
+}
+
+UI --> POSCtrl
+POSCtrl ..> Auth : <<HTTP REST>>
+Auth --> MenuSvc
+Auth --> InvSvc
+Auth --> RepSvc
+
+MenuSvc --> DB : SQL/ORM
+InvSvc --> DB : SQL/ORM
+RepSvc --> DB : SQL/ORM
+@enduml

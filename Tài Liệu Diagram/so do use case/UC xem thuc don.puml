@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+
+actor "Sinh viên" as Student
+
+rectangle "Hệ thống quản lý căng tin" {
+    usecase "Xem thực đơn" as UC1
+}
+
+Student --> UC1
+
+@enduml

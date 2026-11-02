@@ -1,0 +1,55 @@
+@startuml Canteen_Management_UseCase
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle hollow
+
+actor "Sinh Viên" as SV
+actor "Nhân Viên" as NV
+actor "Quản Lý" as QL
+
+' Thừa kế Actor: Quản lý kế thừa toàn bộ quyền của Nhân viên
+NV <|-- QL
+
+rectangle "Hệ Thống Quản Lý Căng Tin" {
+
+  '--- Nhóm chức năng Sinh viên ---
+  usecase "Xem thực đơn" as UC_XemMenu
+  usecase "Chọn món ăn" as UC_ChonMon
+
+  '--- Nhóm chức năng Nhân viên ---
+  usecase "Bán món ăn" as UC_BanMon
+  usecase "Lập hóa đơn" as UC_LapHoaDon
+  usecase "Thanh toán" as UC_ThanhToan
+  usecase "Áp dụng khuyến mãi" as UC_KhuyenMai
+
+  '--- Nhóm chức năng Quản lý ---
+  usecase "Quản lý món ăn" as UC_QLMon
+  usecase "Quản lý nhân viên" as UC_QLNV
+  usecase "Xem báo cáo doanh thu" as UC_BaoCao
+
+  '--- Chức năng hệ thống ---
+  usecase "Đăng nhập" as UC_DangNhap
+}
+
+'--- Tương tác của Sinh Viên ---
+SV --> UC_XemMenu
+UC_XemMenu <.. UC_ChonMon : <<extend>>
+
+'--- Tương tác của Nhân Viên ---
+NV --> UC_BanMon
+UC_BanMon ..> UC_LapHoaDon : <<include>>
+UC_LapHoaDon ..> UC_ThanhToan : <<include>>
+UC_KhuyenMai ..> UC_LapHoaDon : <<extend>>
+
+'--- Tương tác của Quản Lý ---
+QL --> UC_QLMon
+QL --> UC_QLNV
+QL --> UC_BaoCao
+
+'--- Quan hệ Đăng nhập (Yêu cầu xác thực cho các chức năng nội bộ) ---
+UC_BanMon ..> UC_DangNhap : <<include>>
+UC_QLMon ..> UC_DangNhap : <<include>>
+UC_QLNV ..> UC_DangNhap : <<include>>
+UC_BaoCao ..> UC_DangNhap : <<include>>
+
+@enduml
