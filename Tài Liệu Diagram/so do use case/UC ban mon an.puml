@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+
+actor "Nhân viên" as Staff
+
+rectangle "Hệ thống quản lý căng tin" {
+
+    usecase "Bán món ăn" as UC3
+    usecase "Chọn món ăn" as UC2
+    usecase "Nhập số lượng món" as UC31
+    usecase "Ghi nhận đơn hàng" as UC32
+
+    UC3 .> UC2 : <<include>>
+    UC3 .> UC31 : <<include>>
+    UC3 .> UC32 : <<include>>
+}
+
+Staff --> UC3
+
+@enduml

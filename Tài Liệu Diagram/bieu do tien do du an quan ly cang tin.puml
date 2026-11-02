@@ -1,0 +1,43 @@
+@startuml
+title Biểu đồ Tiến độ Dự án Quản lý Căng tin (8 Tuần)
+allowmixing
+
+' Định nghĩa giao diện danh sách công việc dạng cây phân rã
+package "1. Khảo sát & Phân tích" #LightYellow {
+  class "WBS 1.0 Khảo sát & BRD\n(01/10 -> 07/10)" as wbs1 #LightGoldenRodYellow
+  class "WBS 2.0 Kế hoạch & Rủi ro\n(05/10 -> 09/10)" as wbs2 #LightGoldenRodYellow
+}
+
+package "2. Thiết kế Hệ thống (Sprint 1)" #LightCyan {
+  class "WBS 3.1 Tài liệu SRS\n(08/10 -> 12/10)" as wbs31 #LightBlue
+  class "WBS 3.2 Biểu đồ UML\n(10/10 -> 16/10)" as wbs32 #LightBlue
+  class "WBS 3.3 Thiết kế CSDL\n(12/10 -> 16/10)" as wbs33 #LightBlue
+  class "WBS 3.4 Prototype UI\n(12/10 -> 18/10)" as wbs34 #LightBlue
+}
+
+package "3. Cài đặt & Tự động hóa (Sprint 2)" #Lavender {
+  class "WBS 4.1 Setup Git & CI\n(18/10 -> 20/10)" as wbs41 #Thistle
+  class "WBS 4.2 Lập trình Thực đơn & User\n(20/10 -> 29/10)" as wbs42 #Thistle
+  class "WBS 4.3 Lập trình Bán hàng POS\n(25/10 -> 05/11)" as wbs43 #Thistle
+  class "WBS 4.4 Lập trình Báo cáo\n(02/11 -> 08/11)" as wbs44 #Thistle
+}
+
+package "4. Kiểm thử & Bàn giao" #MistyRose {
+  class "WBS 5.1 & 5.2 Kiểm thử & Bugfix\n(08/11 -> 17/11)" as wbs5 #LightPink
+  class "WBS 6.1 Tổng hợp Báo cáo\n(15/11 -> 21/11)" as wbs6 #LightPink
+}
+
+' Thể hiện trình tự triển khai theo mũi tên tiến độ
+wbs1 --> wbs2
+wbs2 --> wbs31
+wbs31 --> wbs32
+wbs32 --> wbs33
+wbs33 --> wbs34
+wbs34 --> wbs41
+wbs41 --> wbs42
+wbs42 --> wbs43
+wbs43 --> wbs44
+wbs44 --> wbs5
+wbs5 --> wbs6
+
+@enduml

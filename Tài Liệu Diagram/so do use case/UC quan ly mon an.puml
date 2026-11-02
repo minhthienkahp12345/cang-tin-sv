@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+
+actor "Quản lý" as Manager
+
+rectangle "Hệ thống quản lý căng tin" {
+
+    usecase "Quản lý món ăn" as UC5
+    usecase "Thêm món ăn" as UC51
+    usecase "Cập nhật món ăn" as UC52
+    usecase "Xóa món ăn" as UC53
+
+    UC5 .> UC51 : <<include>>
+    UC5 .> UC52 : <<include>>
+    UC5 .> UC53 : <<include>>
+}
+
+Manager --> UC5
+
+@enduml

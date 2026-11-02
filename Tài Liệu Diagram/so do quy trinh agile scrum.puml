@@ -1,0 +1,23 @@
+@startuml
+skinparam handwritten false
+skinparam monochrome true
+skinparam packageStyle rect
+
+title QUY TRÌNH AGILE / SCRUM
+
+' Định nghĩa các khối công việc
+storage "Product\nBacklog" as pb
+storage "Sprint\nBacklog" as sb
+storage "Sprint Execution\n(2 Sprints x 3 Tuần)" as se
+storage "Sprint\nReview & Demo" as srd
+storage "Sprint\nRetrospective" as sr
+storage "Potentially\nShippable" as ps
+
+' Định tuyến hướng đi của mũi tên (-r-> là sang phải, -d-> là đi xuống, -l-> là sang trái)
+pb -r-> sb
+sb -r-> se
+se -d-> srd
+srd -l-> sr
+sr -l-> ps
+
+@enduml

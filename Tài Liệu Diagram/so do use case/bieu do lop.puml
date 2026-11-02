@@ -1,0 +1,85 @@
+@startuml Canteen_Class_Diagram_Complete
+skinparam classAttributeIconSize 0
+
+' ================= REALM: USERS & AUTHENTICATION =================
+abstract class TaiKhoanNoiBo {
+  # maTaiKhoan: String
+  # hoTen: String
+  # tenDangNhap: String
+  # matKhau: String
+  + dangNhap(): boolean
+  + dangXuat(): void
+  + doiMatKhau(matKhauMoi: String): boolean
+}
+
+class NhanVien {
+  - maNV: String
+  - chucVu: String
+}
+
+class QuanLy {
+  - maQL: String
+}
+
+' Thừa kế tài khoản đăng nhập
+TaiKhoanNoiBo <|-- NhanVien
+TaiKhoanNoiBo <|-- QuanLy
+
+' Sinh viên truy cập công khai (Không cần tài khoản hệ thống)
+class SinhVien {
+  - maSV: String
+  - hoTen: String
+  - lop: String
+}
+
+' ================= REALM: DOMAIN ENTITIES =================
+class MonAn {
+  - maMon: String
+  - tenMon: String
+  - gia: double
+  - moTa: String
+  + getGia(): double
+}
+
+class HoaDon {
+  - maHoaDon: String
+  - ngayLap: Date
+  - tongTien: double
+  + tinhTongTien(): double
+  + inHoaDon(): void
+}
+
+class ChiTietHoaDon {
+  - maCTHD: String
+  - soLuong: int
+  - donGia: double
+  + tinhThanhTien(): double
+}
+
+class BaoCaoDoanhThu {
+  - maBaoCao: String
+  - ngayTao: Date
+  - tuNgay: Date
+  - denNgay: Date
+  - tongDoanhThu: double
+  + thongKeDoanhThu(): double
+  + xuatFileExcel(): void
+}
+
+' ================= RELATIONSHIPS & PERMISSIONS =================
+
+'--- Quyền và liên kết của QUẢN LÝ ---
+QuanLy "1" -- "0..*" BaoCaoDoanhThu : "tạo & xem" >
+QuanLy "1" -- "0..*" NhanVien : "quản lý" >
+QuanLy "1" -- "0..*" MonAn : "cập nhật/quản lý" >
+
+'--- Nghiệp vụ Bán hàng & Hóa đơn ---
+SinhVien "0..1" -- "0..*" HoaDon : "gọi món" >
+NhanVien "1" -- "0..*" HoaDon : "lập" >
+
+'--- Cấu trúc Hóa đơn & Báo cáo ---
+HoaDon "1" *-- "1..*" ChiTietHoaDon : "bao gồm"
+ChiTietHoaDon "*" -- "1" MonAn : "chứa"
+BaoCaoDoanhThu "1" o-- "0..*" HoaDon : "thống kê từ"
+
+@enduml
