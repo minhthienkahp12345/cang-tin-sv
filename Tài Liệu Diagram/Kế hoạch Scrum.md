@@ -1,4 +1,5 @@
 # Kế hoạch Scrum Sprint: Ứng dụng Quản lý Bán hàng Căng-tin Sinh viên ĐH Hải Phòng
+# Công cụ sử dụng Clickup
 ## Mục tiêu
 Phát triển hệ thống web quản lý bán hàng căng-tin theo từng increment có thể kiểm thử và trình diễn. Kế hoạch gồm 2 Sprint, mỗi Sprint 3 tuần, tiếp theo là 2 tuần kiểm thử tổng thể và đóng gói. Chưa gán ngày lịch vì báo cáo chưa nêu ngày bắt đầu.
 ## Nhóm và vai trò dự kiến
