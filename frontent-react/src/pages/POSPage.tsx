@@ -38,7 +38,7 @@ const money = (value: string | number) =>
 
 const vietQrUrl = (amount: number, description: string) => {
   const bankId = '970436'
-  const accountNo = '031204005543'
+  const accountNo = '1013080209'
   const template = 'MEnMt0S'
   const accountName = 'BUI VAN THIEN'
 
@@ -69,7 +69,6 @@ export default function POSPage() {
   const [showOrders, setShowOrders] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [successNumber, setSuccessNumber] = useState<number | null>(null)
-  const [successOrderId, setSuccessOrderId] = useState<number | null>(null)
   const [cashReceived, setCashReceived] = useState('')
   const [receipt, setReceipt] = useState<Receipt | null>(null)
   const [loading, setLoading] = useState(true)
@@ -126,6 +125,11 @@ export default function POSPage() {
   const received = Number(cashReceived) || 0
   const change = Math.max(0, received - total)
   const canPay = cart.length > 0 && !submitting
+  const nextOrderNumber = orders.reduce(
+    (maximum, order) => Math.max(maximum, order.orderNumber),
+    0,
+  ) + 1
+  const paymentDescription = `THANH TOAN DON ${nextOrderNumber}`
 
   const addProduct = (product: Product) => {
     setCart((current) => {
@@ -173,7 +177,6 @@ export default function POSPage() {
       const paid = paymentMethod === 'CASH' && received > 0 ? received : null
       setReceipt({ order: completedResponse.data, items: cart, paid, change: paymentMethod === 'CASH' ? change : 0 })
       setSuccessNumber(completedResponse.data.orderNumber)
-      setSuccessOrderId(completedResponse.data.id)
       setCart([])
       setCashReceived('')
       await loadOrders()
@@ -253,7 +256,7 @@ export default function POSPage() {
             <div className="border-t pt-4"><div className="mb-4 flex justify-between text-lg font-black"><span>Tổng cộng</span><span className="text-orange-500">{money(total)}</span></div>
               <div className="mb-4 grid grid-cols-2 gap-2">{([['EAT_IN', 'Ăn tại chỗ'], ['TAKE_AWAY', 'Mang đi']] as const).map(([value, label]) => <button key={value} onClick={() => setOrderType(value)} className={`rounded-xl border p-3 text-sm font-bold ${orderType === value ? 'border-orange-500 bg-orange-50 text-orange-600' : 'border-slate-200 text-slate-500'}`}>{label}</button>)}</div>
               <div className="mb-4 grid grid-cols-2 gap-2">{([['CASH', 'Tiền mặt'], ['TRANSFER', 'Chuyển khoản']] as const).map(([value, label]) => <button key={value} onClick={() => setPaymentMethod(value)} className={`rounded-xl border p-3 text-sm font-bold ${paymentMethod === value ? 'border-orange-500 bg-orange-50 text-orange-600' : 'border-slate-200 text-slate-500'}`}>{label}</button>)}</div>
-              {paymentMethod === 'CASH' ? <div className="mb-4 rounded-xl bg-slate-50 p-3"><label className="text-sm font-bold">Tiền khách đưa <span className="font-normal text-slate-400">(không bắt buộc)</span><input type="number" min={0} value={cashReceived} onChange={(event) => setCashReceived(event.target.value)} placeholder="Nhập nếu cần tính tiền thừa" className="mt-2 w-full rounded-lg border bg-white px-3 py-2 outline-none focus:border-orange-400" /></label><div className="mt-2 flex flex-wrap gap-2">{[20000, 50000, 100000, 200000, 500000].map((amount) => <button type="button" key={amount} onClick={() => setCashReceived(String(amount))} className="rounded-lg bg-white px-2 py-1 text-xs font-bold text-slate-600">+{money(amount)}</button>)}</div><p className="mt-3 flex justify-between text-sm font-bold"><span>Tiền thừa trả khách</span><span className={received >= total ? 'text-emerald-600' : 'text-slate-400'}>{received >= total ? money(change) : '—'}</span></p></div> : <div className="mb-4 rounded-xl bg-slate-50 p-3"><p className="text-sm font-bold">Quét mã VietQR để thanh toán</p><img src={vietQrUrl(total, `Don hang ${successOrderId ?? 'pending'}`)} alt="VietQR" className="mx-auto mt-2 h-44 w-44 rounded-lg object-cover" /></div>}
+              {paymentMethod === 'CASH' ? <div className="mb-4 rounded-xl bg-slate-50 p-3"><label className="text-sm font-bold">Tiền khách đưa <span className="font-normal text-slate-400">(không bắt buộc)</span><input type="number" min={0} value={cashReceived} onChange={(event) => setCashReceived(event.target.value)} placeholder="Nhập nếu cần tính tiền thừa" className="mt-2 w-full rounded-lg border bg-white px-3 py-2 outline-none focus:border-orange-400" /></label><div className="mt-2 flex flex-wrap gap-2">{[20000, 50000, 100000, 200000, 500000].map((amount) => <button type="button" key={amount} onClick={() => setCashReceived(String(amount))} className="rounded-lg bg-white px-2 py-1 text-xs font-bold text-slate-600">+{money(amount)}</button>)}</div><p className="mt-3 flex justify-between text-sm font-bold"><span>Tiền thừa trả khách</span><span className={received >= total ? 'text-emerald-600' : 'text-slate-400'}>{received >= total ? money(change) : '—'}</span></p></div> : <div className="mb-4 rounded-xl bg-slate-50 p-3"><p className="text-sm font-bold">Quét mã VietQR để thanh toán</p><img src={vietQrUrl(total, paymentDescription)} alt={`VietQR ${money(total)}`} className="mx-auto mt-2 h-44 w-44 rounded-lg object-cover" /><div className="mt-3 space-y-1 text-xs text-slate-600"><p className="flex justify-between"><span>Số tiền</span><strong>{money(total)}</strong></p><p className="flex justify-between gap-3"><span>Nội dung</span><strong>{paymentDescription}</strong></p></div></div>}
               <button disabled={!cart.length || submitting || !canPay} onClick={() => void submitOrder()} className="w-full rounded-xl bg-orange-500 py-4 font-black text-white shadow-lg shadow-orange-200 disabled:opacity-40">{submitting ? 'Đang thanh toán...' : 'Thanh toán'}</button>
             </div>
           </aside>
