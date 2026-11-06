@@ -158,6 +158,11 @@ export default function POSPage() {
       setError('Bạn cần đăng nhập trước khi thanh toán.')
       return
     }
+    if (paymentMethod === 'CASH' && cashReceived !== '' && received < total) {
+      setCashReceived('')
+      setError('Tiền khách đưa chưa đủ.')
+      return
+    }
     try {
       setSubmitting(true)
       setError('')
